@@ -887,6 +887,11 @@ create_linkpidfile(pid)
 	error("Failed to create pid file %s: %m", linkpidfile);
 	linkpidfile[0] = 0;
     }
+#else
+    /* We still expect LINKNAME is pass to ipcp_up script */
+    if (linkname[0] == 0)
+	return;
+    script_setenv("LINKNAME", linkname, 1);
 #endif
 }
 
