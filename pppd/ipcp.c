@@ -1706,7 +1706,9 @@ ipcp_up(f)
 	return;
     }
     if (ho->hisaddr == 0) {
-	ho->hisaddr = htonl(0x0a404040 + ifunit);
+        // If no remote IP address, set it to same IP address as local instead of a dummpy address
+        // ho->hisaddr = htonl(0x0a404040 + ifunit);
+        ho->hisaddr = go->ouraddr;
 	warn("Could not determine remote IP address: defaulting to %I",
 	     ho->hisaddr);
     }

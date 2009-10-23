@@ -30,7 +30,8 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_C_INCLUDES := \
 	$(LOCAL_PATH)/include
 
-LOCAL_CFLAGS := -DANDROID_CHANGES -DCHAPMS=1 -DMPPE=1 -Iexternal/openssl/include
+# Force sizeof(enum)=4
+LOCAL_CFLAGS := -fno-short-enums -DANDROID_CHANGES -DCHAPMS=1 -DMPPE=1 -Iexternal/openssl/include
 
 LOCAL_MODULE:= pppd
 
