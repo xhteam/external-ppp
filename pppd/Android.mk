@@ -36,7 +36,14 @@ LOCAL_C_INCLUDES := \
 LOCAL_CFLAGS := -fno-short-enums -DANDROID_CHANGES -DCHAPMS=1 -DMPPE=1 -Iexternal/openssl/include
 
 LOCAL_MODULE:= pppd
+LOCAL_MODULE_TAGS := optional
+include $(BUILD_EXECUTABLE)
 
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := chat.c
+LOCAL_SHARED_LIBRARIES := libcutils
+LOCAL_MODULE := chat
+LOCAL_MODULE_TAGS := optional
 include $(BUILD_EXECUTABLE)
 
 endif
