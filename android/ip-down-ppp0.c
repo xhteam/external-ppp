@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,6 +27,45 @@
 
 #include <android/log.h>
 #include <cutils/properties.h>
+#include <cutils/sockets.h>
+
+#define SERVICE_PPPD_GPRS "pppd_gprs"
+
+#define MAX_PPPD_MSG_LEN (32)
+#define PPPD_MSG_PPP_DOWN "ppp-down"
+
+#define SOCKET_NAME_RIL_PPP "rild-ppp"
+
+void sendNotification()
+{
+    struct sockaddr_in local;
+    struct sockaddr_in dest;
+    char snd_buf[MAX_PPPD_MSG_LEN];
+    int pppdSocket = socket(PF_UNIX, SOCK_STREAM, 0);
+    if (pppdSocket < 0) {
+        __android_log_print(ANDROID_LOG_INFO, "ip-down-ppp0", "cannot open socket \n");
+	return;
+    }
+
+    if(socket_local_client_connect(pppdSocket,
+                                SOCKET_NAME_RIL_PPP,
+                                ANDROID_SOCKET_NAMESPACE_RESERVED,
+                                SOCK_STREAM) < 0)
+    {
+        __android_log_print(ANDROID_LOG_INFO, "ip-down-ppp0", "cannot connect rild-ppp socket \n");
+        close(pppdSocket);
+    }
+
+    memset(snd_buf,0,MAX_PPPD_MSG_LEN);  
+    strcpy(snd_buf,PPPD_MSG_PPP_DOWN);  
+
+    //send info to rild  
+    __android_log_print(ANDROID_LOG_INFO, "ip-down-ppp0", "send  ppp-down to rild-ppp\n");
+    write(pppdSocket,snd_buf,sizeof(snd_buf));  
+    __android_log_print(ANDROID_LOG_INFO, "ip-down-ppp0", "send  ppp-down to rild-ppp end\n");
+
+    close(pppdSocket);
+}
 
 int main(int argc, char **argv)
 {
@@ -61,5 +100,7 @@ int main(int argc, char **argv)
 	property_set("net.dns1", "");
 	property_set("net.dns2", "");
     }
+    //Send a notification to rild
+    sendNotification();
     return 0;
 }
