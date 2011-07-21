@@ -15,6 +15,7 @@
 #
 
 LOCAL_PATH := $(call my-dir)
+ifneq ($(PREBUILT_3G_MODEM_RIL),true)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := ip-up-ppp0.c
@@ -32,3 +33,4 @@ LOCAL_MODULE := ip-down-ppp0
 LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/ppp
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_EXECUTABLE)
+endif
