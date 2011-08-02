@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* Copyright (C) 2010-2011 Freescale Semiconductor,Inc. */
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
