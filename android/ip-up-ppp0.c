@@ -78,7 +78,6 @@ int main(int argc, char **argv)
     rt.rt_dev = argv[1];
 
     rt.rt_flags = RTF_UP;
-
     /* Add "default" entry into route table */
     s = socket(AF_INET, SOCK_DGRAM, 0);
     if(s == -1) {
@@ -94,7 +93,6 @@ int main(int argc, char **argv)
         __android_log_print(ANDROID_LOG_ERROR, "ip-up-ppp0", "Fail to add default entry in route table - %s", strerror(errno));
 	return EPERM;
     }
-
     __android_log_print(ANDROID_LOG_INFO, "ip-up-ppp0", "Add default entry into route table");
 
     {
@@ -123,20 +121,14 @@ int main(int argc, char **argv)
 	strcat(propstr1, "dns1");
 	char *dns1 = getenv("DNS1");
 	property_set(propstr1, dns1 ? dns1 : "");
-	// Fixme:  "net.dns1" should be setup in framework code instead of in ip-up-ppp0 script
-	property_set("net.dns1", dns1 ? dns1 : "");
-        __android_log_print(ANDROID_LOG_INFO, "ip-up-ppp0", "Setprop %s to %s", propstr1, dns1 ? dns1 : "");
-        __android_log_print(ANDROID_LOG_INFO, "ip-up-ppp0", "Setprop %s to %s", "net.dns1", dns1 ? dns1 : "");
+    __android_log_print(ANDROID_LOG_INFO, "ip-up-ppp0", "Setprop %s to %s", propstr1, dns1 ? dns1 : "");
 
 	// set net.$LINKNAME.dns2 prop to $DNS2
 	strcpy(propstr1, propstr);
 	strcat(propstr1, "dns2");
 	char *dns2 = getenv("DNS2");
 	property_set(propstr1, dns2 ? dns2 : "");
-	// Fixme:  "net.dns2" should be setup in framework code instead of in ip-up-ppp0 script
-	property_set("net.dns2", dns2 ? dns2 : "");
-        __android_log_print(ANDROID_LOG_INFO, "ip-up-ppp0", "Setprop %s to %s", propstr1, dns2 ? dns2 : "");
-        __android_log_print(ANDROID_LOG_INFO, "ip-up-ppp0", "Setprop %s to %s", "net.dns2", dns2 ? dns2 : "");
+     __android_log_print(ANDROID_LOG_INFO, "ip-up-ppp0", "Setprop %s to %s", propstr1, dns2 ? dns2 : "");
     }
     __android_log_print(ANDROID_LOG_INFO, "ip-up-ppp0",
                         "All traffic is now redirected to %s", argv[1]);

@@ -37,28 +37,6 @@
 #define PPPD_MSG_PPP_DOWN "ppp-down"
 
 #define SOCKET_NAME_RIL_PPP "rild-ppp"
-#define WIFI_INTERFACE "wlan0"
-
-int check_wlan0_state()
-{
-	struct ifreq ifr;
-	int s;
-	int updown;
-	int ret = -1;
-	memset(&ifr, 0, sizeof(struct ifreq));
-	strcpy(ifr.ifr_name,WIFI_INTERFACE);
-	if((s = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-	    return ret;
-
-	ioctl(s, SIOCGIFFLAGS, &ifr);
-
-	if (ifr.ifr_flags & IFF_UP)
-	    ret = 0;
-
-	close(s);
-	return ret;
-	
-}
 
 void sendNotification()
 {
@@ -122,11 +100,6 @@ int main(int argc, char **argv)
 	property_set("net.ppp0.dns1", "");
 	property_set("net.ppp0.dns2", "");
 
-	if (check_wlan0_state() != 0) {
-	    /* only reset gobal dns when wifi not running. */
-	    property_set("net.dns1", "");
-	    property_set("net.dns2", "");
-	}
     }
     //Send a notification to rild
     sendNotification();
